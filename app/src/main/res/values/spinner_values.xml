@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_options">
+        <item>Todos</item>
+        <item>Artista</item>
+        <item>Albúm</item>
+        <item>Ano de Lançamento</item>
+        <item>Editora</item>
+        <item>Avaliação</item>
+    </string-array>
+</resources>
