@@ -2,5 +2,25 @@
     <string name="app_name">Projeto</string>
     <string name="action_settings">Settings</string>
     <string name="artista">Artista</string>
+    <string name="delete_item">"Albúm Eliminado"</string>
+    <string name="save_data">A Guardar Dados.</string>
+    <string name="show_all">A mostrar os albuns todos</string>
+    <string name="all">Todos</string>
+    <string name="album">Albúm</string>
+    <string name="year">Ano de Lançamento</string>
+    <string name="avaliation">Avaliação</string>
+    <string name="success_search">Pesquisa com Sucesso!</string>
+    <string name="not_found">Não há resultados</string>
+    <string name="add">Adicionar</string>
+    <string name="stars">" Estrelas"</string>
+    <string name="new_album">Novo Albúm Adicionado</string>
+    <string name="cancel">Cancelar</string>
+    <string name="cancel_album">"Cancelou um novo albúm! "</string>
+    <string name="album_new">NOVO ALBÚM</string>
+    <string name="album_information">Introduza a informação do Albúm:</string>
+    <string name="editora">Editora</string>
+    <string name="delete">Eliminar</string>
+    <string name="cancelled">Cancelado.</string>
+    <string name="delete_album">ELIMINAR ALBUM</string>
 
 </resources>

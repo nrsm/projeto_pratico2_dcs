@@ -25,6 +25,13 @@
         android:hint="Ano de Lançamento"
         android:inputType="number" />
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText_editora"
+        android:hint="Editora"
+        android:nestedScrollingEnabled="true" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,4 +45,5 @@
         android:id="@+id/ratingBar"
         android:numStars="5"
         android:stepSize="1" />
+
 </LinearLayout>

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, music);
 
-        ListView listView = (ListView) findViewById(R.id.listView_albuns);
+        final ListView listView = (ListView) findViewById(R.id.listView_albuns);
         listView.setAdapter(adapter);
 
         Spinner s = (Spinner) findViewById(R.id.spinner_search);
@@ -65,24 +65,72 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 //codigo que é executado quando se clica num item da listview
-                Toast.makeText(MainActivity.this, "Eliminou o item " + position, Toast.LENGTH_SHORT).show();
 
-                music.remove(position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
-                        android.R.layout.simple_list_item_1, music);
+                // Get the layout inflater
+                LayoutInflater inflater = MainActivity.this.getLayoutInflater();
 
-                ListView listView = (ListView) findViewById(R.id.listView_albuns);
-                listView.setAdapter(adapter);
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
+                builder.setView(inflater.inflate(R.layout.dialog_delete, null));
 
-                return false;
+
+                // Add the buttons
+                builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+
+                        //Obter referências para as EditTexts
+
+                        //faz o cast de um diálogo "genérico" para um alertdialog
+                        AlertDialog al = (AlertDialog) dialog;
+
+
+                        Toast.makeText(MainActivity.this, getString(R.string.delete_item), Toast.LENGTH_SHORT).show();
+
+                        music.remove(position);
+
+
+                        //dizer à listview para se actualizar
+
+                        ListView lv = (ListView) findViewById(R.id.listView_albuns);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
+                                android.R.layout.simple_list_item_1, music);
+
+                        lv.setAdapter(adapter);
+
+
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                        Toast.makeText(MainActivity.this, R.string.cancelled, Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                // Set other dialog properties
+                builder.setTitle(R.string.delete_album);
+
+
+
+                // Create the AlertDialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                return true;
+
             }
-        });
 
 
-        //APENAS PARA UM CLIQUE NA LISTVIEW
+
+    });
+
+
+    //APENAS PARA UM CLIQUE NA LISTVIEW
 
 //    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //        @Override
@@ -100,13 +148,13 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    });
 
-}
 
+}
     @Override
     protected void onStop() {
         super.onStop();
 
-        Toast.makeText(MainActivity.this, "A Guardar Dados.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, R.string.save_data, Toast.LENGTH_SHORT).show();
 
         SharedPreferences sp = getSharedPreferences("appMusic", 0);
 
@@ -145,10 +193,10 @@ public class MainActivity extends AppCompatActivity {
                     android.R.layout.simple_list_item_1, music);
 
             lv.setAdapter(adapter);
-            Toast.makeText(MainActivity.this, "A mostrar os albuns todos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, R.string.show_all, Toast.LENGTH_SHORT).show();
         } else { //a edittext nao esta vazia
 
-            if (selectedItem.equals("Todos")) {
+            if (selectedItem.equals(getString(R.string.all))) {
                 for (String c : music) { //para cada c em albuns
                     if (c.contains(termo)) { //se o c contiver o termos
                         searchedAlbuns.add(c); //adicionar o c à lista searchedAlbuns
@@ -164,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                         searchedAlbuns.add(c);
                     }
                 }
-            } else if (selectedItem.equals("Albúm")) {
+            } else if (selectedItem.equals(getString(R.string.album))) {
                 //pesquisa pelo album
                 for (String c : music) {
                     String[] split = c.split("\\-");
@@ -175,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                         searchedAlbuns.add(c);
                     }
                 }
-            }else if (selectedItem.equals("Ano de Lançamento")) {
+            }else if (selectedItem.equals(getString(R.string.year))) {
                 //pesquisa pelo ano lancamento
                 for (String c : music) {
                     String[] split = c.split("\\n");
@@ -186,10 +234,21 @@ public class MainActivity extends AppCompatActivity {
                         searchedAlbuns.add(c);
                     }
                 }
-            }else if (selectedItem.equals("Avaliação")) {
-                //pesquisa pela avaliacao
+            }else if (selectedItem.equals(getString(R.string.editora))) {
+                //pesquisa pela editora
                 for (String c : music) {
                     String[] split = c.split("\\--");
+                    String avaliar = split[1];
+                    avaliar = avaliar.trim();
+
+                    if (avaliar.contains(termo)) {
+                        searchedAlbuns.add(c);
+                    }
+                }
+            } else if (selectedItem.equals(getString(R.string.avaliation))) {
+                //pesquisa pela avaliacao
+                for (String c : music) {
+                    String[] split = c.split("\\|");
                     String avaliar = split[1];
                     avaliar = avaliar.trim();
 
@@ -208,13 +267,13 @@ public class MainActivity extends AppCompatActivity {
                 lv.setAdapter(adapter);
 
                 //mostrar uma mensagem a dizer "Showing searched contacts."
-                Toast.makeText(MainActivity.this, "Pesquisa com Sucesso!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.success_search, Toast.LENGTH_SHORT).show();
             } else { //lista de resultados esta vazia
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                         android.R.layout.simple_list_item_1, music);
 
                 lv.setAdapter(adapter);
-                Toast.makeText(MainActivity.this, "Não há resultados", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.not_found, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -232,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Add the buttons
-        builder.setPositiveButton("Adicionar", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
 
@@ -244,16 +303,18 @@ public class MainActivity extends AppCompatActivity {
                 EditText etArtista = (EditText) al.findViewById(R.id.editText_artist);
                 EditText etAlbum = (EditText) al.findViewById(R.id.editText_album);
                 EditText etLancamento = (EditText) al.findViewById(R.id.editText_year);
+                EditText et_editora = (EditText) al.findViewById(R.id.editText_editora);
                 RatingBar stars = (RatingBar) al.findViewById(R.id.ratingBar);
 
                 String artista = etArtista.getText().toString();
                 String album = etAlbum.getText().toString();
                 String lancamento = etLancamento.getText().toString();
+                String editora = et_editora.getText().toString();
                 int avaliacao = (int)stars.getRating() ;
 
                 //criar um novo album
 
-                String newAlbum = artista + " - " + album + "\n" + lancamento + " -- " + avaliacao  + " Estrelas";
+                String newAlbum = artista + " - " + album + "\n" + lancamento + " -- " + editora + "  |  " + avaliacao  + getString(R.string.stars);
 
                 //adicionar o album à lista de albuns
 
@@ -266,20 +327,20 @@ public class MainActivity extends AppCompatActivity {
                         android.R.layout.simple_list_item_1, music);
 
                 lv.setAdapter(adapter);
-                Toast.makeText(MainActivity.this, "Novo Albúm Adicionado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.new_album, Toast.LENGTH_SHORT).show();
 
             }
         });
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
-                Toast.makeText(MainActivity.this, "Cancelou um novo albúm! ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.cancel_album, Toast.LENGTH_SHORT).show();
 
             }
         });
         // Set other dialog properties
-        builder.setTitle("NOVO ALBÚM");
-        builder.setMessage("Introduza a informação do Albúm:");
+        builder.setTitle(R.string.album_new);
+        builder.setMessage(R.string.album_information);
 
 
 
@@ -288,4 +349,14 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+
+
+
+
+
+
+
+    //DELETE ALBUM DIALOG
+
 }
