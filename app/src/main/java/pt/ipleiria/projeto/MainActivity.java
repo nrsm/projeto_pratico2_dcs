@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, music);
 
-        final ListView listView = (ListView) findViewById(R.id.listView_albuns);
+        ListView listView = (ListView) findViewById(R.id.listView_albuns);
         listView.setAdapter(adapter);
 
         Spinner s = (Spinner) findViewById(R.id.spinner_search);
